@@ -8,7 +8,7 @@ function unique(xs){return [...new Set(xs)];}
 function localParse(message,context={}){
  const s=String(message).toLowerCase().replace(/ё/g,"е").replace(/см²/g,"см2").replace(/\s+/g," ").trim();
  const areas=[];
- for(const re of [/\b(50|100|300|600)\s*(?:кв\.?\s*)?см(?:2)?\b/g,/\bплощад(?:ь|ью|и)?\s*(?:в\s*)?(50|100|300|600)\b/g]){
+ for(const re of [/\b(50|100|300|600)\s*(?:кв\.?\s*)?см(?:2)?(?![а-яё\d])/g,/площад(?:ь|ью|и)?\s*(?:в\s*)?(50|100|300|600)\b/g]){
   let m;while((m=re.exec(s)))areas.push(Number(m[1]));
  }
  const compare=/сравн|выгодн|разниц|различ|(?:что|какой)\s+дешевле|против|\bvs\b|\bили\b/.test(s);
@@ -16,7 +16,7 @@ function localParse(message,context={}){
  const threshold=/как(?:ой|ом)\s+тираж|до\s+\d+\s*(?:руб|р)|ниже\s+\d+\s*(?:руб|р)|меньше\s+\d+\s*(?:руб|р)/.test(s);
  const explain=/почему|объясни|откуда|как\s+(?:считается|рассчит|формирует)|из\s+чего|структур|состав|расшифр|разложи|подробн|параметр/.test(s);
  const qtyMatches=[];
- for(const re of [/\b(\d{1,7})\s*(?:шт\b|шт\.|штук\b|штуки\b|шеврон(?:ов|а|ы)?\b|издели(?:й|я|е)\b)/g,/\bтираж(?:ом|а)?\s*(?:в\s*)?(\d{1,7})\b/g,/\bна\s+(\d{1,7})\b/g]){
+ for(const re of [/\b(\d{1,7})\s*(?:шт\.?|штук|штуки|шеврон(?:ов|а|ы)?|издели(?:й|я|е))(?![а-яё])/g,/тираж(?:ом|а)?\s*(?:в\s*)?(\d{1,7})\b/g,/на\s+(\d{1,7})\b/g]){
   let m;while((m=re.exec(s)))qtyMatches.push(Number(m[1]));
  }
  let quantity=qtyMatches.find(safeQty)??null;
@@ -30,7 +30,7 @@ function localParse(message,context={}){
   if(am)areaList=[Number(am[1])];
  }
  if(quantity===null&&/^\d{1,7}$/.test(s)&&safeQty(Number(s)))quantity=Number(s);
- const targetMatch=threshold?s.match(/(?:до|ниже|меньше|себестоимост[ьюи]?|стоимост[ьюи]?)\s*(\d+(?:[.,]\d+)?)\s*(?:руб|р\b|₽)/):null;
+ const targetMatch=threshold?s.match(/(\d+(?:[.,]\d+)?)\s*(?:руб(?:лей|ля|ль)?|₽|р(?![а-яё]))/):null;
  const metersMatch=capacity?s.match(/(\d+(?:[.,]\d+)?)\s*(?:погонн(?:ых|ого|ые)?\s*)?(?:метр(?:ов|а)?|м\b)/):null;
  let intent="calculate";
  if(compare)intent="compare";
