@@ -35,7 +35,7 @@ function showResults(a){
  const headline=document.createElement("div");headline.className="result-title";headline.textContent=a.kind==="compare"?"Сравнение вариантов":"Проверенный расчёт";resultPanel.append(headline);
  for(const s of a.stats){
   const card=document.createElement("div");card.className="result-card";
-  const h=document.createElement("h3");h.textContent=s.area+" см² · "+s.qty+" шт.";
+  const h=document.createElement("h3");h.textContent=E.areaLabel(s.area)+" · "+s.qty+" шт.";
   const grid=document.createElement("div");grid.className="result-grid";
   grid.append(stat("Себестоимость / шт.",E.money(s.unit)),
               stat("Весь тираж",E.money(s.total)),
@@ -92,6 +92,6 @@ async function ask(text){
 form.addEventListener("submit",e=>{e.preventDefault();ask(input.value)});
 input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(form.reportValidity())ask(input.value);}});
 document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>ask(b.dataset.prompt)));
-append("Привет! Я помогу разобраться с себестоимостью шевронов. Напишите, например: «Посчитай 150 штук площадью 300 см²». Можно сравнивать площади, спрашивать о составе расходов или уточнять тираж следующим сообщением.","assistant");
+append("Привет! Назовите фактическую площадь шеврона и тираж, например: «150 штук, 47 см²». Площадь автоматически округляется вверх до 50, 100, 300 или 600 см². Для площади больше 600 см² расчёт не выполняется. Можно сравнивать варианты и уточнять тираж следующими сообщениями.","assistant");
 showModel();updateMode();input.focus();
 })();
