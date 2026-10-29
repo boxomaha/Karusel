@@ -40,7 +40,9 @@ const prompt=[
  "Ты анализируешь вопросы по себестоимости шевронов. Не вычисляй денежные суммы.",
  "Возвращай только JSON без markdown и дополнительных пояснений.",
  "Структура JSON: {\"intent\":\"calculate|compare|threshold|capacity|explain|unknown\",\"area\":число или null,\"area2\":число или null,\"quantity\":целое или null,\"target\":число или null,\"meters\":число или null}.",
- "Площади только 50, 100, 300, 600 см2. Не придумывай незаданные параметры.",
+ "area и area2 — ФАКТИЧЕСКИЕ площади в см2, которые назвал пользователь (любые числа с дробной частью), не округляй их до 50/100/300/600.",
+ "Примеры: 47 см2 => area:47; 51 см2 => area:51; 601 см2 => area:601. Не удаляй значение свыше 600: клиент сам откажет в расчёте.",
+ "Размеры округляет только детерминированный калькулятор: (0,50]=>50, (50,100]=>100, (100,300]=>300, (300,600]=>600, свыше 600 — запрет.",
  "Если пользователь уточняет количество или площадь из контекста, возвращай только явно новые значения, иначе null.",
  "compare: сравнение 2 площадей. threshold: подобрать тираж для целевой себестоимости в рублях. capacity: сколько шевронов на погонный метр. explain: объяснить расчёт.",
  "В остальных случаях calculate. Если вопрос не о расчётах шевронов, unknown.",
@@ -63,7 +65,7 @@ async function interpret(message,context,env){
  if(typeof txt!=="string")throw new Error("Model returned no text");
  const result=JSON.parse(txt.trim());
  if(!["calculate","compare","threshold","capacity","explain","unknown"].includes(result.intent))throw new Error("Unknown intent");
- const area=n=>[50,100,300,600].includes(n)?n:null;
+ const area=n=>typeof n==="number"&&Number.isFinite(n)?n:null;
  const amount=n=>Number.isFinite(n)&&n>0?n:null;
  return {intent:result.intent,area:area(result.area),area2:area(result.area2),
          quantity:Number.isSafeInteger(result.quantity)&&result.quantity>0&&result.quantity<=1000000?result.quantity:null,
