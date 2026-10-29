@@ -1,23 +1,73 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Шевроны — калькулятор себестоимости</title>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Шевроны — авторизация</title>
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f6fb;color:#172638}*{box-sizing:border-box}body{margin:0}.top{background:#112b48;color:white;padding:32px max(22px,calc((100% - 1100px)/2))}.top h1{margin:0;font-size:30px}.top p{opacity:.8}.wrap{max-width:1100px;margin:24px auto;padding:0 18px}.panel{background:#fff;border:1px solid #dfe8f1;border-radius:15px;padding:24px;margin-bottom:18px;box-shadow:0 4px 20px #1726380a}h2{font-size:20px;margin:0 0 17px}.controls{display:flex;flex-wrap:wrap;align-items:end;gap:16px}label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}select,input{padding:11px 13px;border:1px solid #cbd6e2;border-radius:9px;font-size:16px;min-width:180px;background:white;color:inherit}button{background:#1669bf;color:white;border:0;border-radius:9px;padding:12px 18px;font-size:15px;cursor:pointer}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.card{background:#f8fbff;border:1px solid #e1e8ef;border-radius:12px;padding:18px}.card:first-child{background:#e6f1ff;border-color:#bdd8f8}.card small{display:block;color:#627991}.card strong{display:block;font-size:24px;margin-top:9px}.scroll{overflow-x:auto}table{width:100%;min-width:900px;border-collapse:collapse;font-size:13px}th,td{padding:12px;border-bottom:1px solid #e2ebf3;text-align:right;font-variant-numeric:tabular-nums}th{background:#edf3fa;color:#52677d}th:first-child,td:first-child{text-align:left}tr.selected{background:#e6f1ff}tbody tr{cursor:pointer}tbody tr:hover{background:#f0f6ff}.note{font-size:13px;color:#60758b;line-height:1.5}@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}.card strong{font-size:19px}.panel{padding:16px}}@media print{.top{background:white;color:black}button{display:none}.panel{box-shadow:none}}
-</style></head><body><header class="top"><h1>Шевроны · себестоимость</h1><p>Калькулятор по таблице Excel · габардин, вышивка и лазерная резка</p></header><main class="wrap"><section class="panel"><div class="controls"><div><label for="area">Площадь шеврона</label><select id="area"><option value="50">50 см²</option><option value="100">100 см²</option><option value="300">300 см²</option><option value="600">600 см²</option></select></div><div><label for="qty">Тираж, шт.</label><input id="qty" type="number" min="1" step="1" value="100"></div><button onclick="window.print()">Печать / PDF</button></div><div class="cards"><div class="card"><small>Себестоимость штуки</small><strong id="unit"></strong></div><div class="card"><small>Себестоимость тиража</small><strong id="total"></strong></div><div class="card"><small>Материал за штуку</small><strong id="mat"></strong></div><div class="card"><small>Вышивка + лазер за штуку</small><strong id="work"></strong></div></div><p class="note">Расчёт произвольного тиража основан на формулах исходного файла. Ставки и параметры взяты из листов Excel.</p></section><section class="panel"><h2>Расчёт по тиражам</h2><div class="scroll"><table><thead><tr><th>Тираж</th><th>Шевронов в заготовке</th><th>Заготовок / пог. м</th><th>Материал / шт.</th><th>Вышивка / шт.</th><th>Лазер / шт.</th><th>Итого / шт.</th><th>Итого тираж</th></tr></thead><tbody id="rows"></tbody></table></div><p class="note">Нажмите на строку тиража, чтобы выбрать его.</p></section><section class="panel"><h2>Базовые параметры</h2><div class="scroll"><table style="min-width:500px"><thead><tr><th>Параметр</th><th>Значение</th></tr></thead><tbody id="params"></tbody></table></div><p class="note">Сайт статический. Изменения сохраняются только в вашем браузере, общая база данных и совместное редактирование не подключены.</p></section></main>
-<script>
-"use strict";
-// Значения из листов «50см2», «100см2», «300см2», «600см2» файла ШЕВРОНЫ.xlsx.
-// B — число шевронов в заготовке; C — заготовок/пог.м; D — стоимость пог.м;
-// G/H — начальная и переменная стоимость вышивки; J/K — начальная и переменная стоимость лазера.
-const DATA={
-"50": {B:12,C:10,D:160,G:1366.1,H:186.75,J:216.9575,K:31.46},
-"100":{B:4,C:10,D:160,G:1366.1,H:186.75,J:216.9575,K:31.46},
-"300":{B:2,C:10,D:160,G:1366.1,H:235.42,J:216.9575,K:31.46},
-"600":{B:1,C:10,D:160,G:1366.1,H:201.47,J:216.9575,K:31.46}
-};
-const $=id=>document.getElementById(id),money=n=>new Intl.NumberFormat("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+" ₽",integer=n=>new Intl.NumberFormat("ru-RU").format(n);
-function calc(p,q){const mat=p.D/p.C/p.B,emb=p.G/q+p.H/p.B,laser=p.J/q+p.K/p.B;return {mat,emb,laser,unit:mat+emb+laser};}
-function render(){const p=DATA[$("area").value],q=Math.max(1,Math.round(Number($("qty").value)||1)),c=calc(p,q);$("unit").textContent=money(c.unit);$("total").textContent=money(c.unit*q);$("mat").textContent=money(c.mat);$("work").textContent=money(c.emb+c.laser);
-const body=$("rows");body.replaceChildren();for(let qty=10;qty<=300;qty+=10){let x=calc(p,qty),tr=document.createElement("tr");if(qty===q)tr.className="selected";for(const val of [integer(qty),integer(p.B),integer(p.C),money(x.mat),money(x.emb),money(x.laser),money(x.unit),money(x.unit*qty)]){let td=document.createElement("td");td.textContent=val;tr.append(td)}tr.onclick=()=>{$("qty").value=qty;render()};body.append(tr)}
-const params=[["Стоимость погонного метра",money(p.D)],["Шевронов в заготовке",integer(p.B)],["Заготовок с погонного метра",integer(p.C)],["Начальные расходы на вышивку",money(p.G)],["Расходы на вышивку на заготовку",money(p.H)],["Начальные расходы на лазер",money(p.J)],["Расходы на лазер на заготовку",money(p.K)]];$("params").replaceChildren(...params.map(pair=>{let tr=document.createElement("tr");for(const v of pair){let td=document.createElement("td");td.textContent=v;tr.append(td)}return tr}));}
-$("area").onchange=render;$("qty").oninput=render;render();
+
+
+[hidden]{display:none!important}
+.login-shell{max-width:460px;margin:5vh auto;padding:0 18px}
+.login-panel{background:#fff;border-radius:18px;padding:32px;border:1px solid #dfe8f1;box-shadow:0 12px 35px #17263816}
+.login-panel h2{font-size:24px;margin:0 0 8px}
+.login-panel p{color:#61758c;font-size:14px;margin:0 0 26px;line-height:1.5}
+.login-panel label{margin:15px 0 7px}
+.login-panel input{width:100%}
+.login-panel button{width:100%;margin-top:24px}
+.login-panel .error{color:#b32d36;min-height:20px;font-size:14px;margin:12px 0 0}
+.login-panel .small-note{font-size:12px;color:#7c8ca0;margin-top:15px}
+</style></head>
+<body><header class="top"><h1>Шевроны · себестоимость</h1><p>Калькулятор производственной себестоимости</p></header>
+<div id="login-screen" class="login-shell"><section class="login-panel">
+<h2>Вход в калькулятор</h2>
+<p>Авторизуйтесь, чтобы загрузить и посмотреть расчётную таблицу.</p>
+<form id="login-form" autocomplete="off">
+<label for="login">Логин</label><input id="login" name="username" type="text" autocomplete="username" required autofocus>
+<label for="password">Пароль</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+<button id="login-button" type="submit">Войти</button>
+<p id="login-error" class="error" role="alert" aria-live="polite"></p>
+</form>
+<p class="small-note">После перезагрузки страницы потребуется повторный вход.</p>
+</section></div>
+<div id="app-mount" hidden></div>
+<script type="module">
+const form=document.getElementById("login-form");
+const screen=document.getElementById("login-screen");
+const mount=document.getElementById("app-mount");
+const error=document.getElementById("login-error");
+const button=document.getElementById("login-button");
+const enc=new TextEncoder();
+const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,"0")).join("");
+const SALT="19f4c1124fbf59adb5248287f91ee4a6";
+const EXPECTED="228eff278a8c108a45799b04ec7ecbfb85b9e4895eb8707c1a8dc3e1553d18e2";
+const saltBytes=new Uint8Array(SALT.match(/../g).map(x=>parseInt(x,16)));
+let loading=false;
+async function verify(login,password){
+ const key=await crypto.subtle.importKey("raw",enc.encode(login+"\n"+password),"PBKDF2",false,["deriveBits"]);
+ const hash=await crypto.subtle.deriveBits({name:"PBKDF2",salt:saltBytes,iterations:180000,hash:"SHA-256"},key,256);
+ return hex(hash)===EXPECTED;
+}
+form.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(loading)return;
+ loading=true;button.disabled=true;button.textContent="Проверка…";error.textContent="";
+ try{
+  if(!await verify(form.elements.username.value.trim(),form.elements.password.value)){
+   error.textContent="Неверный логин или пароль.";
+   form.elements.password.value="";
+   form.elements.password.focus();
+   return;
+  }
+  button.textContent="Загрузка таблицы…";
+  form.elements.password.value="";
+  const res=await fetch("./calculator.html",{cache:"no-store"});
+  if(!res.ok)throw new Error("Не удалось загрузить таблицу.");
+  mount.innerHTML=await res.text();
+  const script=document.createElement("script");
+  script.src="./calculator.js";
+  script.async=false;
+  await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=()=>reject(new Error("Не удалось загрузить расчёт."));document.body.appendChild(script)});
+  screen.hidden=true;mount.hidden=false;
+  document.title="Шевроны — калькулятор себестоимости";
+ }catch(e){mount.replaceChildren();error.textContent=e.message||"Ошибка. Попробуйте ещё раз."}
+ finally{loading=false;button.disabled=false;button.textContent="Войти"}
+});
 </script></body></html>
