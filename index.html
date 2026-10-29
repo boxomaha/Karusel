@@ -14,6 +14,60 @@
 .login-panel button{width:100%;margin-top:24px}
 .login-panel .error{color:#b32d36;min-height:20px;font-size:14px;margin:12px 0 0}
 .login-panel .small-note{font-size:12px;color:#7c8ca0;margin-top:15px}
+
+/* Conversational workspace */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#app-mount{min-height:calc(100vh - 102px)}
+.chat-layout{max-width:1380px;margin:0 auto;padding:20px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;min-height:calc(100vh - 116px)}
+.chat-sidebar,.chat-main{background:#fff;border:1px solid #e0e9f1;border-radius:16px;box-shadow:0 6px 28px #0c274407}
+.chat-sidebar{display:flex;flex-direction:column;padding:23px 18px;gap:25px}
+.side-title{display:flex;align-items:center;gap:12px}
+.side-logo{background:#0f4d90;color:#fff;font-size:22px;font-weight:800;display:grid;place-items:center;width:42px;height:42px;border-radius:13px}
+.side-title strong{display:block;font-size:17px}.side-title small{display:block;font-size:12px;color:#69809a;margin-top:3px}
+.side-section{display:flex;flex-direction:column;gap:11px}
+.side-caption{font-size:11px;font-weight:800;letter-spacing:.11em;color:#8395a9;margin-bottom:3px}
+.side-item{font-size:13px;color:#4b657b;line-height:1.45;display:flex;align-items:center;gap:8px}
+.status-dot{background:#3dbd84;width:8px;height:8px;border-radius:99px;display:inline-block}
+.side-prompt{background:#f4f8fc;color:#304f70;border:1px solid #e2edf5;border-radius:9px;box-shadow:none;text-align:left;padding:12px;font-size:13px;line-height:1.3}
+.side-prompt:hover{background:#eaf4ff}
+.side-bottom{margin-top:auto;padding-top:20px;border-top:1px solid #eef2f6}
+.side-bottom p{font-size:12px;line-height:1.65;color:#7a8ea2}
+.model-details summary{font-size:13px;font-weight:650;cursor:pointer;color:#245b94}
+.model-data{white-space:pre-wrap;margin:12px 0;font-size:12px;line-height:1.6;color:#5b7390}
+.chat-main{display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:660px}
+.chat-header{padding:21px 26px;border-bottom:1px solid #edf2f7;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.chat-header h2{margin:0;font-size:20px;letter-spacing:-.03em}
+.chat-header p{margin:5px 0 0;color:#71859c;font-size:13px}
+.mode-chip{border-radius:99px;font-size:12px;font-weight:650;padding:7px 11px;white-space:nowrap}
+.mode-local{background:#fff7e4;color:#886023;border:1px solid #f2e1b5}
+.mode-online{background:#e9f8ef;color:#1b8052;border:1px solid #c9edda}
+.chat-messages{flex:1;overflow-y:auto;max-height:500px;min-height:270px;padding:28px 25px;display:flex;flex-direction:column;gap:20px}
+.chat-line{display:flex;gap:12px;max-width:89%;align-items:start}
+.from-user{align-self:flex-end;flex-direction:row-reverse}
+.message-avatar{flex:none;width:32px;height:32px;display:grid;place-items:center;border-radius:11px;background:#e7f2ff;color:#1a619b;font-weight:800;font-size:14px}
+.from-user .message-avatar{background:#eaf0f6;color:#47627d;font-weight:500;font-size:12px}
+.message-bubble{padding:15px 17px;background:#f3f7fb;border-radius:5px 15px 15px 15px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.from-user .message-bubble{background:#e2efff;color:#173c66;border-radius:15px 5px 15px 15px}
+.result-panel{background:#f6faff;border-top:1px solid #e6eff9;padding:14px 24px;display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
+.result-title{font-size:12px;font-weight:800;letter-spacing:.08em;color:#71849b;width:100%;text-transform:uppercase}
+.result-card{background:white;border:1px solid #dceaf7;border-radius:12px;padding:14px 17px;flex:1;min-width:250px}
+.result-card h3{font-size:15px;margin:0 0 12px;color:#205486}
+.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+.result-stat span{font-size:11px;color:#71879e;display:block}
+.result-stat strong{font-size:15px;display:block;margin-top:4px}
+.chat-bottom{border-top:1px solid #edf1f5;padding:18px 24px 15px}
+.suggestion-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.suggestion-row button{font-size:12px;border:1px solid #d8e6f4;background:#f7fbff;color:#255780;border-radius:99px;padding:8px 12px}
+.suggestion-row button:hover{background:#e8f4ff}
+.chat-composer{display:flex;gap:10px;align-items:end;background:#f7fafd;border:1px solid #dbe7f2;border-radius:14px;padding:7px}
+.chat-composer:focus-within{border-color:#669dcf;box-shadow:0 0 0 3px #2872bb12}
+.chat-composer textarea{flex:1;resize:vertical;min-width:0;min-height:55px;max-height:140px;border:none;background:transparent;padding:11px;font-size:14px;font:inherit;outline:none;color:#18334f}
+.chat-composer button{font-size:13px;white-space:nowrap;padding:12px 16px;margin-bottom:1px}
+.chat-composer button:disabled{opacity:.6;cursor:wait}
+.chat-footnote{font-size:11px;color:#8598a9;margin:9px 3px 0;line-height:1.5}
+@media(max-width:800px){.chat-layout{display:block;padding:10px}.chat-sidebar{margin-bottom:12px;padding:15px}.chat-sidebar .side-section{display:none}.chat-sidebar .side-bottom{margin-top:0;padding-top:5px}.chat-sidebar .side-bottom p{display:none}.chat-main{min-height:75vh}.chat-header{padding:16px}.chat-header h2{font-size:17px}.chat-messages{padding:16px;max-height:54vh}.chat-bottom{padding:12px}.chat-line{max-width:96%}.result-panel{padding:13px}.result-card{min-width:180px}}
+@media(max-width:450px){.chat-header{display:block}.mode-chip{display:inline-block;margin-top:9px}.chat-composer button{padding:12px 9px}.result-stat strong{font-size:13px}}
+
 </style></head>
 <body><header class="top"><h1>Шевроны · себестоимость</h1><p>Калькулятор производственной себестоимости</p></header>
 <div id="login-screen" class="login-shell"><section class="login-panel">
@@ -36,6 +90,8 @@ const error=document.getElementById("login-error");
 const button=document.getElementById("login-button");
 const enc=new TextEncoder();
 const hex=b=>Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,"0")).join("");
+const AI_ENDPOINT=""; // URL Cloudflare Worker / другого серверного API; не добавляйте сюда секреты.
+window.CHEVRON_AI={endpoint:AI_ENDPOINT,token:""};
 const SALT="19f4c1124fbf59adb5248287f91ee4a6";
 const EXPECTED="228eff278a8c108a45799b04ec7ecbfb85b9e4895eb8707c1a8dc3e1553d18e2";
 const saltBytes=new Uint8Array(SALT.match(/../g).map(x=>parseInt(x,16)));
@@ -56,17 +112,30 @@ form.addEventListener("submit",async event=>{
    form.elements.password.focus();
    return;
   }
-  button.textContent="Загрузка таблицы…";
+  button.textContent="Загрузка чата…";
+  if(AI_ENDPOINT){
+    const api=await fetch(AI_ENDPOINT.replace(/\/$/,"")+"/session",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({login:form.elements.username.value.trim(),password:form.elements.password.value})
+    });
+    if(!api.ok)throw new Error("Сервер авторизации недоступен или вход запрещён.");
+    const data=await api.json();
+    if(!data.token)throw new Error("Сервер не выдал токен сеанса.");
+    window.CHEVRON_AI.token=data.token;
+  }
   form.elements.password.value="";
   const res=await fetch("./calculator.html",{cache:"no-store"});
   if(!res.ok)throw new Error("Не удалось загрузить таблицу.");
   mount.innerHTML=await res.text();
-  const script=document.createElement("script");
-  script.src="./calculator.js";
-  script.async=false;
-  await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=()=>reject(new Error("Не удалось загрузить расчёт."));document.body.appendChild(script)});
+  for(const src of ["calculator.js","chat-engine.js","chat-ui.js"]){
+    const script=document.createElement("script");
+    script.src="./"+src;
+    script.async=false;
+    await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=()=>reject(new Error("Не удалось загрузить "+src));document.body.appendChild(script)});
+  }
   screen.hidden=true;mount.hidden=false;
-  document.title="Шевроны — калькулятор себестоимости";
+  document.getElementById("chat-input")?.focus();
+  document.title="Шевроны — помощник по себестоимости";
  }catch(e){mount.replaceChildren();error.textContent=e.message||"Ошибка. Попробуйте ещё раз."}
  finally{loading=false;button.disabled=false;button.textContent="Войти"}
 });
