@@ -21,9 +21,13 @@ function localParse(message,context={}){
  }
  let quantity=qtyMatches.find(safeQty)??null;
  let areaList=unique(areas);
- if(compare&&areaList.length<2){
-  const all=unique([...s.matchAll(/\b(50|100|300|600)\b/g)].map(m=>Number(m[1])));
-  areaList=unique([...areaList,...all.filter(a=>a!==quantity)]);
+ if(compare){
+  const pair=s.match(/\b(50|100|300|600)\s*(?:и|или|vs|против|\/|,|-)\s*(50|100|300|600)(?!\d)/);
+  if(pair)areaList=unique([Number(pair[1]),Number(pair[2]),...areaList]);
+  else if(areaList.length<2){
+   const all=unique([...s.matchAll(/\b(50|100|300|600)\b/g)].map(m=>Number(m[1])));
+   areaList=unique([...areaList,...all.filter(a=>a!==quantity)]);
+  }
  }
  if(!compare && !areaList.length && /шеврон|площад|см2/.test(s)){
   const am=s.match(/\b(50|100|300|600)\b/);
@@ -34,7 +38,7 @@ function localParse(message,context={}){
  const metersMatch=capacity?s.match(/(\d+(?:[.,]\d+)?)\s*(?:погонн(?:ых|ого|ые)?\s*)?(?:метр(?:ов|а)?|м\b)/):null;
  let intent="calculate";
  if(compare)intent="compare";
- else if(threshold&&targetMatch)intent="threshold";
+ else if(threshold)intent="threshold";
  else if(capacity)intent="capacity";
  else if(explain)intent="explain";
  else if(!/(?:себестоим|стоим|цена|цену|посчитай|рассчитай|сколько|калькул|тираж|шеврон|площад|см2|шт|^\d+$)/.test(s))intent="unknown";
