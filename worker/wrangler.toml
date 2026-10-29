@@ -1,0 +1,8 @@
+name = "karusel-shevrons-ai"
+main = "worker.js"
+compatibility_date = "2026-10-29"
+
+[vars]
+ALLOWED_ORIGIN = "https://boxomaha.github.io"
+AI_MODEL = "gpt-4.1-mini"
+AI_API_URL = "https://api.openai.com/v1/chat/completions"
