@@ -93,7 +93,7 @@ export default {
    if(typeof message!=="string"||!message.trim()||message.length>500)
     return json({error:"Invalid question"},400,origin,env);
    const ctx=body.context&&typeof body.context==="object"?{
-      area:[50,100,300,600].includes(Number(body.context.area))?Number(body.context.area):null,
+      area:body.context.area!==null&&body.context.area!==undefined&&Number.isFinite(Number(body.context.area))?Number(body.context.area):null,
       quantity:Number.isSafeInteger(body.context.quantity)&&body.context.quantity>0?body.context.quantity:null
    }:{area:null,quantity:null};
    try {
