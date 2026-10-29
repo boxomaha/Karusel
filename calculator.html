@@ -2,15 +2,15 @@
   <aside class="chat-sidebar">
     <div class="side-title"><span class="side-logo">Σ</span><div><strong>Шевроны</strong><small>Производственный калькулятор</small></div></div>
     <div class="side-section"><span class="side-caption">РАСЧЁТНАЯ МОДЕЛЬ</span>
-      <div class="side-item"><span class="status-dot"></span>4 площади: 50, 100, 300, 600 см²</div>
+      <div class="side-item"><span class="status-dot"></span>Диапазоны: до 50 / 100 / 300 / 600 см²</div>
       <div class="side-item">Материал · вышивка · лазер</div>
-      <div class="side-item">Любой тираж от 1 до 1 млн шт.</div>
+      <div class="side-item">Фактическая площадь до 600 см²</div>
     </div>
     <div class="side-section">
       <span class="side-caption">ЧТО МОЖНО СПРОСИТЬ</span>
-      <button type="button" class="side-prompt" data-prompt="Посчитай 150 шевронов по 300 см²">Расчёт себестоимости</button>
-      <button type="button" class="side-prompt" data-prompt="Сравни 100 и 300 см² при тираже 200 шт">Сравнение площадей</button>
-      <button type="button" class="side-prompt" data-prompt="Какой тираж нужен для 50 рублей за штуку при 300 см²?">Подбор тиража</button>
+      <button type="button" class="side-prompt" data-prompt="Посчитай 150 шевронов по 47 см²">Расчёт себестоимости</button>
+      <button type="button" class="side-prompt" data-prompt="Сравни 47 и 51 см² при тираже 200 шт">Сравнение площадей</button>
+      <button type="button" class="side-prompt" data-prompt="Какой тираж нужен для 50 рублей за штуку при 47 см²?">Подбор тиража</button>
       <button type="button" class="side-prompt" data-prompt="Почему себестоимость снижается с ростом тиража?">Объяснение формул</button>
     </div>
     <div class="side-bottom">
@@ -24,12 +24,12 @@
     <div id="result-panel" class="result-panel" hidden></div>
     <div class="chat-bottom">
       <div id="suggestions" class="suggestion-row">
-        <button type="button" data-prompt="100 шт по 50 см²">100 шт · 50 см²</button>
-        <button type="button" data-prompt="200 шт по 300 см²">200 шт · 300 см²</button>
-        <button type="button" data-prompt="Сравни 100 и 600 см² при 100 штуках">Сравнить площади</button>
+        <button type="button" data-prompt="100 шт по 47 см²">100 шт · 47 см²</button>
+        <button type="button" data-prompt="200 шт по 125 см²">200 шт · 125 см²</button>
+        <button type="button" data-prompt="Сравни 51 и 301 см² при 100 штуках">Сравнить площади</button>
       </div>
       <form id="chat-form" class="chat-composer"><label for="chat-input" class="sr-only">Вопрос по расчёту</label>
-        <textarea id="chat-input" rows="2" maxlength="500" placeholder="Например: сколько стоят 150 шевронов площадью 300 см²?" required></textarea>
+        <textarea id="chat-input" rows="2" maxlength="500" placeholder="Например: сколько стоят 150 шевронов площадью 47 см²?" required></textarea>
         <button id="send-button" type="submit" aria-label="Отправить вопрос" title="Отправить (Enter)">Отправить <span aria-hidden="true">↗</span></button>
       </form>
       <p class="chat-footnote" id="mode-description">Доступны команды на русском языке. Полноценная ИИ-модель подключается через защищённый сервер.</p>
